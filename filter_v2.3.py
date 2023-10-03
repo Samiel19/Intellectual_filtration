@@ -139,8 +139,8 @@ def first_plus_filtration(first_minus):
             first_minus[index] = first_minus[index]
         elif 0 < index:
             if ((marker_data[index - 1] < 0 and marker_data[index] > 0)
-                and first_minus[index] != amp_max
-                and (abs(marker_data[index]) >= 1
+               and first_minus[index] != amp_max
+               and (abs(marker_data[index]) >= 1
                or abs(marker_data[index - 1]) >= 1)):
                 first_minus[index] = (
                     first_minus[index - 1] + first_minus[index + 1]
@@ -187,7 +187,7 @@ def calculator(file):
     if instrument_data.shape[1] > 3:
         clear_data_col = (instrument_data.dropna(how='all')).iloc[1:, :]
         nan_index = [n for n in clear_data_col.columns
-                     if clear_data_col[n].any() is False]
+                     if not clear_data_col[n].any()]
         clear_data = clear_data_col.drop(clear_data_col.columns[nan_index],
                                          axis=1)
         lb_at = clear_data[clear_data.columns[2]].to_list()
@@ -211,7 +211,7 @@ def calculator(file):
     marker_data_1 = marker_data_maker(unfiltered_data=signal)
     triple_filt_1 = first_minus_filtration(signal)
     last_minus = first_plus_filtration(triple_filt_1)
-    if ADDITIONAL_FILT is True:
+    if ADDITIONAL_FILT:
         another_plus_filtration(last_minus)
     last_minus[0] = 0
     return {'instrument_data': instrument_data,
@@ -325,7 +325,7 @@ def filter(file, box, choose=False):
     path, filename_xlsx = os.path.split(abs_file_path)
     filename = os.path.splitext(filename_xlsx)[0]
     output_name = f"{filename}_filtered"
-    if os.path.exists(f'{output_name}.xlsx') and box is False:
+    if os.path.exists(f'{output_name}.xlsx') and not box:
         list_of_files = os.listdir(path)
         pattern = f'{output_name}*'
         files_count = 0
@@ -336,9 +336,9 @@ def filter(file, box, choose=False):
         filtered_data.to_excel(f'{cleared_output_name}_{files_count}.xlsx',
                                index=False,
                                header=None)
-    elif (box is True and os.path.exists('Multifile_clipboard.xlsx')
-          or choose is True):
-        if choose is False:
+    elif (box and os.path.exists('Multifile_clipboard.xlsx')
+          or choose):
+        if not choose:
             filename = 'Multifile_clipboard_filtered.xlsx'
         else:
             filename = 'Multifile_filtered.xlsx'
@@ -375,7 +375,7 @@ def filter(file, box, choose=False):
                                 index=False,
                                 header=None)
         else:
-            if choose is False:
+            if not choose:
                 filename = 'Multifile_clipboard_filtered.xlsx'
             else:
                 filename = 'Multifile_filtered.xlsx'
@@ -424,7 +424,7 @@ def filter_full(file):
     a = data['a']
     last_minus = data['last_minus']
     signal = data['signal']
-    if a is not False:
+    if a:
         signal = a
     dict_filt_data = {'Time': time,
                       'Sig.Un': data['signal'],
@@ -685,7 +685,7 @@ class IntFiltApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     files_count += 1
             filename = f'{files_count}_clipboard.xlsx'
         buffer = pandas.read_clipboard()
-        if box_status is False:
+        if not box_status:
             filenames = []
             for i in range(0, buffer.shape[1], step):
                 (buffer.iloc[:, i: i+4]).to_excel(
@@ -878,9 +878,9 @@ def main():
 
 
 if __name__ == '__main__':
-    """The measurement data that you load into the program 
-       must correspond to the primary data obtained from 
+    """The measurement data that you load into the program
+       must correspond to the primary data obtained from
        the Kvant.Z atomic absorption spectrometer.
-       Another way to use this program - uploadig dada 
+       Another way to use this program - uploadig dada
        as array with time and signal columns."""
     main()
