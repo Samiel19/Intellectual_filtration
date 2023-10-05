@@ -231,7 +231,7 @@ def calculator(file):
 
 def plot_maker(y, y_2, x, output_name, a):
     """Plot maker function. Uses y (unfiltered signal),
-       y_2 (filtered signal), x (time), outpu_name (file_name),
+       y_2 (filtered signal), x (time), output_name (file_name),
        and a-flag as arguments. y and y_2 are
        data arrays, size 2xN, where N is array len. x as time should
        have same len, as y and y_2. Output name is name of filtering file.
@@ -580,10 +580,9 @@ class IntFiltApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def choose_file(self):
         """Function for calculationg data from .xls file."""
-        self.listWidget.clear()  # На случай, если в списке уже есть элементы
+        self.listWidget.clear()  # In case not empty list
         file = QtWidgets.QFileDialog.getOpenFileName(self, "Выберите файл")
-        # открыть диалог выбора директории и установить значение переменной
-        # равной пути к выбранной директории
+        # Open directory choice dialog
         uploaded_file = file[0]
 
         if self.StDevCkBox.isChecked():
