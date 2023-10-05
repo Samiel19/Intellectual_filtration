@@ -9,7 +9,7 @@ import pandas
 
 from PyQt6 import QtCore, QtWidgets
 
-# Costants using for additional filtration according data params 
+# Costants using for additional filtration according data params
 
 COEFF_BIG = 2
 COEFF = 0.6
