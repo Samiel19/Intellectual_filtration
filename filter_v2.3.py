@@ -1,14 +1,15 @@
-import sys
-import os
-import fnmatch
-import pandas
-import matplotlib.pyplot as plt
-import math
 import copy
+import fnmatch
+import math
+import os
 import shutil
+import sys
+import matplotlib.pyplot as plt
+import pandas
 
 from PyQt6 import QtCore, QtWidgets
 
+# Costants using for additional filtration according data params 
 
 COEFF_BIG = 2
 COEFF = 0.6
@@ -27,7 +28,8 @@ def devider_calc(unfiltered_data):
 
 def marker_data_maker(unfiltered_data):
     """Fuction for marker data calculation.
-       Takes data array, size 2xN, where N is array len."""
+       Takes data array, size 2xN, where N is array len.
+    """
     marker_data = [
         (unfiltered_data[index] - unfiltered_data[index + 1]) / DEVIDER
         for index in range(len(unfiltered_data) - 1)
@@ -38,7 +40,8 @@ def marker_data_maker(unfiltered_data):
 
 def first_minus_filtration(alone_minus):
     """First minus filtration.
-       Takes data array, size 2xN, where N is array len."""
+       Takes data array, size 2xN, where N is array len.
+    """
     cache_mark = []
     minus = 0
     marker_data = marker_data_maker(alone_minus)
@@ -99,7 +102,8 @@ def first_minus_filtration(alone_minus):
 
 def another_plus_filtration(first_minus):
     """Experimenatal fuction for first plus filtration.
-       Takes data array, size 2xN, where N is array len."""
+       Takes data array, size 2xN, where N is array len.
+    """
     marker_data = marker_data_maker(first_minus)
     for index, _ in enumerate(first_minus) and enumerate(marker_data):
         if index == 0:
@@ -129,7 +133,8 @@ def another_plus_filtration(first_minus):
 
 def first_plus_filtration(first_minus):
     """Fuction for first plus filtration.
-       Takes data array, size 2xN, where N is array len."""
+       Takes data array, size 2xN, where N is array len.
+    """
     marker_data = marker_data_maker(first_minus)
     amp_max = max(first_minus)
     amp_max_index = 0
@@ -176,7 +181,8 @@ def first_plus_filtration(first_minus):
 def calculator(file):
     """Main calculation function.
        Takes data .xls file or automaticly formed instrument data
-       as argument."""
+       as argument.
+    """
     clip_data = pandas.ExcelFile(file)
     sheet_num = len(clip_data.sheet_names) - 1
     instrument_data = pandas.read_excel(
@@ -228,7 +234,8 @@ def plot_maker(y, y_2, x, output_name, a):
        y_2 (filtered signal), x (time), outpu_name (file_name),
        and a-flag as arguments. y and y_2 are
        data arrays, size 2xN, where N is array len. x as time should
-       have same len, as y and y_2. Output name is name of filtering file."""
+       have same len, as y and y_2. Output name is name of filtering file.
+    """
     if a is not False:
         y_2 = a
     y_max = round(max(y), 5)
@@ -261,7 +268,8 @@ def plot_maker_mean(
        have same len, as y and y_2. Output name is name of filtering file.
        y_3 is mean file data, st_dev_filt is standart deviation of filtered
        data, st_dev_unfilt is standart deviation of unfiltered dada,
-       mean_max_filt is mean maximum of filtered data."""
+       mean_max_filt is mean maximum of filtered data.
+    """
     if a is not False:
         y_2 = a
     y_max = round(max(y), 5)
@@ -289,7 +297,8 @@ def mean_calc(file, start):
     """Mean calculating function. Calculating mean signal
        for few measurment arrays.
        Takes .xls file with few filtered and unfiltered arrays and
-       start point (int number) as arguments."""
+       start point (int number) as arguments.
+    """
     cols = list(range(0, file.shape[1]))[start::7]
     mean_signal = [
         sum([file[col][i] for col in cols]) / len(cols)
@@ -307,7 +316,8 @@ def mean_calc(file, start):
 def filter(file, box, choose=False):
     """Main filtration function. Takes .xls file, value of box
        and choose parameters as arguments. Produce filtered file and
-       plots."""
+       plots.
+    """
     data = calculator(file=file)
     time = data['time']
     last_minus = data['last_minus']
@@ -418,7 +428,8 @@ def filter(file, box, choose=False):
 def filter_full(file):
     """Filtration function for algorithm testing.
        Takes .xls file. Produce filtered file with intermediate data
-       and plots."""
+       and plots.
+    """
     data = calculator(file=file)
     time = data['time']
     a = data['a']
@@ -762,7 +773,8 @@ class IntFiltApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def choose_file_full(self):
         """Function for calculationg data from .xls file.
-           Produces intermediate data too."""
+           Produces intermediate data too.
+        """
         self.listWidget.clear()
         file = QtWidgets.QFileDialog.getOpenFileName(self, "Выберите файл")
         uploaded_file = file[0]
@@ -814,7 +826,8 @@ class IntFiltApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def upload_file_full(self):
         """Function for calculationg data from clipboard.
-           Produces intermediate data too."""
+           Produces intermediate data too.
+        """
         self.listWidget.clear()
         path = os.path.abspath('.')
         list_of_files = os.listdir(path)
@@ -878,9 +891,9 @@ def main():
 
 
 if __name__ == '__main__':
-    """The measurement data that you load into the program
-       must correspond to the primary data obtained from
-       the Kvant.Z atomic absorption spectrometer.
-       Another way to use this program - uploadig dada
-       as array with time and signal columns."""
+    # The measurement data that you load into the program
+    #  must correspond to the primary data obtained from
+    #  the Kvant.Z atomic absorption spectrometer.
+    #  Another way to use this program - uploadig dada
+    #  as array with time and signal columns.
     main()
