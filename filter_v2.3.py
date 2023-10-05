@@ -892,8 +892,8 @@ def main():
 
 if __name__ == '__main__':
     # The measurement data that you load into the program
-    #  must correspond to the primary data obtained from
-    #  the Kvant.Z atomic absorption spectrometer.
-    #  Another way to use this program - uploadig dada
-    #  as array with time and signal columns.
+    # must correspond to the primary data obtained from
+    # the Kvant.Z atomic absorption spectrometer.
+    # Another way to use this program - uploadig dada
+    # as array with time and signal columns.
     main()
