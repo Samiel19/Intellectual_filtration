@@ -62,7 +62,7 @@ python3 -m venv env
 Activate virtual environment:
 
 ```
-source env/script/activate
+source env/scripts/activate
 ```
 Install dependencies from the requirements.txt file:
 ```
