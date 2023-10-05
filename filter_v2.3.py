@@ -236,7 +236,7 @@ def plot_maker(y, y_2, x, output_name, a):
        data arrays, size 2xN, where N is array len. x as time should
        have same len, as y and y_2. Output name is name of filtering file.
     """
-    if a is not False:
+    if a:
         y_2 = a
     y_max = round(max(y), 5)
     y_2_max = round(max(y_2), 5)
@@ -270,7 +270,7 @@ def plot_maker_mean(
        data, st_dev_unfilt is standart deviation of unfiltered dada,
        mean_max_filt is mean maximum of filtered data.
     """
-    if a is not False:
+    if a:
         y_2 = a
     y_max = round(max(y), 5)
     y_2_max = round(max(y_2), 5)
@@ -325,7 +325,7 @@ def filter(file, box, choose=False):
     a = data['a']
     mean_filt = None
     mean_unfilt = None
-    if a is not False:
+    if a:
         signal = a
     dict_filt_data = {'Time': time,
                       'Signal_filt': last_minus,
@@ -407,7 +407,7 @@ def filter(file, box, choose=False):
         filtered_data.to_excel(f'{output_name}.xlsx',
                                index=False,
                                header=None)
-    if mean_filt is not None:
+    if mean_filt:
         plot_maker_mean(a=a,
                         y=last_minus,
                         y_2=signal,
